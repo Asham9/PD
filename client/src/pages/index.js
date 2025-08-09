@@ -1,0 +1,12 @@
+export {default as HomeLayout} from './HomeLayout'
+export {default as Register} from './Register'
+export {default as Login} from './Login'
+export {default as Landing} from './Landing'
+export {default as Error} from './Error'
+export {default as Product} from './Products'
+export {default as Services} from './Services'
+export {default as Solutions} from './Solutions'
+export {default as Resources} from './Resources'
+export {default as AdminLogin} from './AdminLogin'
+export {default as AdminDashboard} from './AdminDashboard'
+
