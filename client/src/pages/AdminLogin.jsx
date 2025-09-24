@@ -1,70 +1,64 @@
-import axios from 'axios';
+import { Form, redirect } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useActionData,Form,redirect } from "react-router-dom";
+import customFetch from '../utils/customFetch';
 
-export const action=async ({request})=>{
-    const formData=await request.formData();
-    const Data=Object.fromEntries(formData);
+// eslint-disable-next-line react-refresh/only-export-components
+export const action = async ({ request }) => {
+  const formData = await request.formData();
+  const credentials = Object.fromEntries(formData);
 
-    try {
-      const {data}=await axios.post('/api/v1/auth/admin',Data,{ withCredentials: true })
-      if(data){
-
-        toast.success(`${data.msg}`);
-        return redirect('/admin-dashboard')
-      }
-    } catch (error) {
-       toast.error(error?.response?.data?.msg);
-    }
+  try {
+    const { data } = await customFetch.post('/auth/admin', credentials);
+    toast.success(data.message || 'Login successful');
+    return redirect('/admin-dashboard');
+  } catch (error) {
+    const message = error?.response?.data?.message || 'Unable to sign in. Please try again.';
+    toast.error(message);
+    return null;
   }
+};
 
-export default function AdminLogin() {
-    const data=useActionData()
-    console.log(data);
-
-
-
+const AdminLogin = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-tr from-[#fbfaf8] to-[#fff7f0] px-4">
-      <div className="w-full max-w-md bg-white shadow-2xl rounded-2xl p-10 sm:p-12">
-        <h2 className="text-3xl sm:text-4xl font-extrabold text-center text-gray-800 mb-8">
-          Admin Login
-        </h2>
-        <Form method='post' className="space-y-6" >
+    <section className="min-h-[calc(100vh-8rem)] bg-gradient-to-tr from-[#fbfaf8] to-[#fff7f0] px-4 py-16">
+      <div className="mx-auto w-full max-w-md rounded-3xl bg-white p-10 shadow-2xl sm:p-12">
+        <h1 className="text-center text-3xl font-extrabold text-gray-800 sm:text-4xl">Admin login</h1>
+        <p className="mt-2 text-center text-sm text-slate-600">
+          Use the seeded credentials <span className="font-semibold text-orange-600">admin@aisolutions.com</span> /{' '}
+          <span className="font-semibold text-orange-600">secret123</span> to explore the dashboard.
+        </p>
+
+        <Form method="post" className="mt-8 space-y-6">
           <div>
-            <label className="block text-gray-700 text-base font-semibold mb-2">
-              Email
-            </label>
+            <label className="block text-sm font-semibold text-gray-700">Email</label>
             <input
               type="email"
-              placeholder="Enter your email"
               name="email"
-              className="w-full px-5 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-4 focus:ring-orange-400 transition"
+              placeholder="Enter your email"
+              className="mt-2 w-full rounded-xl border border-gray-300 px-5 py-3 text-sm shadow-sm focus:border-orange-400 focus:outline-none focus:ring-4 focus:ring-orange-400/40"
               required
             />
           </div>
           <div>
-            <label className="block text-gray-700 text-base font-semibold mb-2">
-              Password
-            </label>
+            <label className="block text-sm font-semibold text-gray-700">Password</label>
             <input
               type="password"
               name="password"
               placeholder="Enter your password"
-              className="w-full px-5 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-4 focus:ring-orange-400 transition"
+              className="mt-2 w-full rounded-xl border border-gray-300 px-5 py-3 text-sm shadow-sm focus:border-orange-400 focus:outline-none focus:ring-4 focus:ring-orange-400/40"
               required
             />
           </div>
           <button
             type="submit"
-            className="w-full bg-orange-500 text-white py-3 rounded-xl font-semibold text-lg hover:text-orange-600 hover:bg-orange-100 border border-orange-500 transition cursor-pointer"
+            className="w-full rounded-xl bg-orange-500 py-3 text-lg font-semibold text-white transition hover:bg-orange-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-500"
           >
-            Login
+            Log in
           </button>
         </Form>
       </div>
-    </div>
+    </section>
   );
-}
+};
 
-
+export default AdminLogin;

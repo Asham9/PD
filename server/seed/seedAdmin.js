@@ -22,7 +22,8 @@ const createAdmin = async () => {
 
     await Admin.create({
       email: 'admin@aisolutions.com',
-      password: hashedPassword
+      password: hashedPassword,
+      lastLogin: new Date(),
     });
 
     console.log(' Admin user created successfully');
